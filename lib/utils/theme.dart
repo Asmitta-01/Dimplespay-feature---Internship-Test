@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 class AppTheme {
   static TextDirection textDirection = TextDirection.ltr;
 
+  static const String fontFamily = 'AfacadFlux';
+
   static ThemeData appTheme = lightTheme.copyWith(
     colorScheme: ColorScheme.fromSeed(
-      seedColor: const Color(0xff006399),
+      seedColor: const Color(0xff00509d),
       brightness: Brightness.light,
-      primary: const Color(0xff006399),
-      secondary: const Color(0xffe8d302),
+      primary: const Color(0xff00509d),
       onSurface: Colors.black87,
       surface: Colors.white,
     ),
@@ -16,11 +17,11 @@ class AppTheme {
       style: ElevatedButton.styleFrom(
         elevation: 0,
         foregroundColor: Colors.white,
-        backgroundColor: const Color(0xff006399),
+        backgroundColor: const Color(0xff00509d),
         padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10.0),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         textStyle: const TextStyle(
-          fontFamily: 'AfacadFlux',
+          fontFamily: fontFamily,
           fontSize: 20,
           fontWeight: FontWeight.w500,
           letterSpacing: 0.15,
@@ -30,13 +31,13 @@ class AppTheme {
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
         elevation: 0,
-        side: const BorderSide(color: Color(0xff006399), width: 1.4),
+        side: const BorderSide(color: Color(0xff00509d), width: 1.4),
         // foregroundColor: Colors.white,
         // backgroundColor: const Color(0xff006399),
         padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10.0),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         textStyle: const TextStyle(
-          fontFamily: 'AfacadFlux',
+          fontFamily: fontFamily,
           fontSize: 20,
           fontWeight: FontWeight.w500,
           letterSpacing: 0.15,
@@ -70,7 +71,7 @@ class AppTheme {
     cardTheme: const CardTheme(color: Color(0xfff0f0f0)),
     cardColor: const Color(0xfff0f0f0),
 
-    fontFamily: 'AfacadFlux',
+    fontFamily: fontFamily,
     textTheme: _getTextTheme(),
 
     /// Floating Action Theme
@@ -86,17 +87,17 @@ class AppTheme {
     // InputDecorationTheme
     inputDecorationTheme: const InputDecorationTheme(
       hintStyle: TextStyle(
-        fontFamily: 'AfacadFlux',
+        fontFamily: fontFamily,
         fontSize: 19,
         letterSpacing: 0.15,
       ),
       labelStyle: TextStyle(
-        fontFamily: 'AfacadFlux',
+        fontFamily: fontFamily,
         fontSize: 19,
         letterSpacing: 0.15,
       ),
       errorStyle: TextStyle(
-        fontFamily: 'AfacadFlux',
+        fontFamily: fontFamily,
         fontSize: 16,
         letterSpacing: 0.15,
       ),
@@ -184,64 +185,64 @@ class AppTheme {
 
   static TextTheme _getTextTheme() {
     return const TextTheme(
-      displayLarge: TextStyle(fontFamily: 'AfacadFlux', fontSize: 99),
-      displayMedium: TextStyle(fontFamily: 'AfacadFlux', fontSize: 62),
-      displaySmall: TextStyle(fontFamily: 'AfacadFlux', fontSize: 50),
-      headlineMedium: TextStyle(fontFamily: 'AfacadFlux', fontSize: 42.5),
+      displayLarge: TextStyle(fontFamily: fontFamily, fontSize: 99),
+      displayMedium: TextStyle(fontFamily: fontFamily, fontSize: 62),
+      displaySmall: TextStyle(fontFamily: fontFamily, fontSize: 50),
+      headlineMedium: TextStyle(fontFamily: fontFamily, fontSize: 42.5),
       headlineSmall: TextStyle(
-        fontFamily: 'AfacadFlux',
+        fontFamily: fontFamily,
         fontSize: 30,
         fontWeight: FontWeight.w400,
       ),
       titleLarge: TextStyle(
-        fontFamily: 'AfacadFlux',
+        fontFamily: fontFamily,
         fontSize: 26,
         fontWeight: FontWeight.w500,
         letterSpacing: 0.15,
       ),
       titleMedium: TextStyle(
-        fontFamily: 'AfacadFlux',
+        fontFamily: fontFamily,
         fontSize: 22.5,
         fontWeight: FontWeight.w400,
         letterSpacing: 0.15,
       ),
       titleSmall: TextStyle(
-        fontFamily: 'AfacadFlux',
+        fontFamily: fontFamily,
         fontSize: 20,
         fontWeight: FontWeight.w400,
         letterSpacing: 0.1,
       ),
       labelLarge: TextStyle(
-        fontFamily: 'AfacadFlux',
+        fontFamily: fontFamily,
         fontSize: 17.5,
         fontWeight: FontWeight.w500,
       ),
       labelMedium: TextStyle(
-        fontFamily: 'AfacadFlux',
+        fontFamily: fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w500,
         letterSpacing: .4,
       ),
       labelSmall: TextStyle(
-        fontFamily: 'AfacadFlux',
+        fontFamily: fontFamily,
         fontSize: 11.5,
         fontWeight: FontWeight.w400,
         letterSpacing: 1.5,
       ),
       bodyLarge: TextStyle(
-        fontFamily: 'AfacadFlux',
+        fontFamily: fontFamily,
         fontSize: 20,
         fontWeight: FontWeight.w500,
       ),
       bodyMedium: TextStyle(
-        fontFamily: 'AfacadFlux',
+        fontFamily: fontFamily,
         fontSize: 17,
         height: 1.15,
         fontWeight: FontWeight.w400,
         letterSpacing: 0.25,
       ),
       bodySmall: TextStyle(
-        fontFamily: 'AfacadFlux',
+        fontFamily: fontFamily,
         fontSize: 15,
         fontWeight: FontWeight.w400,
         letterSpacing: 0.4,
