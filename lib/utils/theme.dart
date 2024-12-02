@@ -188,7 +188,11 @@ class AppTheme {
       displayLarge: TextStyle(fontFamily: fontFamily, fontSize: 99),
       displayMedium: TextStyle(fontFamily: fontFamily, fontSize: 62),
       displaySmall: TextStyle(fontFamily: fontFamily, fontSize: 50),
-      headlineMedium: TextStyle(fontFamily: fontFamily, fontSize: 42.5),
+      headlineMedium: TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 42.5,
+        fontWeight: FontWeight.w600,
+      ),
       headlineSmall: TextStyle(
         fontFamily: fontFamily,
         fontSize: 30,

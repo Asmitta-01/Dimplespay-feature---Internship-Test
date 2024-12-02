@@ -1,6 +1,7 @@
+import 'package:dimplespay_feature_implementation/controllers/dashboard_controller.dart';
 import 'package:dimplespay_feature_implementation/controllers/login_controller.dart';
+import 'package:dimplespay_feature_implementation/views/dashboard_screen.dart';
 import 'package:dimplespay_feature_implementation/views/login_screen.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 abstract class Routes {
@@ -22,6 +23,10 @@ class AppPages {
       page: () => const LoginScreen(),
       binding: BindingsBuilder.put(() => LoginController()),
     ),
-    GetPage(name: Routes.dashboard, page: () => Container()),
+    GetPage(
+      name: Routes.dashboard,
+      page: () => const DashboardScreen(),
+      binding: BindingsBuilder.put(() => DashboardController()),
+    ),
   ];
 }

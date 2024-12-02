@@ -1,4 +1,5 @@
 // import 'package:dimplespay_feature_implementation/routes.dart';
+import 'package:dimplespay_feature_implementation/routes.dart';
 import 'package:dimplespay_feature_implementation/utils/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,7 +10,7 @@ class LoginController extends GetxController {
   Future<String?> login(String email, String password) async {
     String? result = await _apiService.login(email: email, password: password);
     if (result == null) {
-      // login successful
+      Get.offAllNamed(Routes.dashboard);
       Get.showSnackbar(GetSnackBar(
         message: 'Login successful',
         duration: const Duration(seconds: 2),
@@ -21,7 +22,6 @@ class LoginController extends GetxController {
           color: Get.theme.colorScheme.onPrimary,
         ),
       ));
-      // Get.offAllNamed(Routes.dashboard);
     }
     return result;
   }
