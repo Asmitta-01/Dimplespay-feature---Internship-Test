@@ -1,11 +1,28 @@
+// import 'package:dimplespay_feature_implementation/routes.dart';
+import 'package:dimplespay_feature_implementation/utils/api_service.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class LoginController extends GetxController {
-  // final UserRepository _userRepository = Get.find();
-  // final UserController _userController = Get.find();
+  final ApiService _apiService = Get.find();
 
   Future<String?> login(String email, String password) async {
-    await Future.delayed(const Duration(seconds: 2));
-    return null;
+    String? result = await _apiService.login(email: email, password: password);
+    if (result == null) {
+      // login successful
+      Get.showSnackbar(GetSnackBar(
+        message: 'Login successful',
+        duration: const Duration(seconds: 2),
+        backgroundColor: Get.theme.colorScheme.primary,
+        margin: const EdgeInsets.all(16),
+        borderRadius: 8,
+        icon: Icon(
+          Icons.check_circle_outline_outlined,
+          color: Get.theme.colorScheme.onPrimary,
+        ),
+      ));
+      // Get.offAllNamed(Routes.dashboard);
+    }
+    return result;
   }
 }

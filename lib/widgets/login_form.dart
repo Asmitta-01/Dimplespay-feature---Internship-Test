@@ -128,9 +128,11 @@ class LoginFormState extends State<LoginForm> {
       if (result != null) {
         Get.showSnackbar(GetSnackBar(
           message: result,
-          duration: const Duration(seconds: 5),
+          duration: const Duration(seconds: 3),
+          backgroundColor: Get.theme.colorScheme.error,
+          margin: const EdgeInsets.all(16),
+          borderRadius: 8,
         ));
-        // SnackBars.showGetSnackbar(Icons.warning, result, isError: true);
       }
     }
   }
