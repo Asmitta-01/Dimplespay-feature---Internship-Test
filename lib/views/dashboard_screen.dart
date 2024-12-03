@@ -1,6 +1,7 @@
 import 'package:dimplespay_feature_implementation/controllers/dashboard_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 
 class DashboardScreen extends GetView<DashboardController> {
   const DashboardScreen({super.key});
@@ -164,11 +165,22 @@ class DashboardScreen extends GetView<DashboardController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "CFA 20,120.3",
-              style: Get.textTheme.headlineSmall!
-                  .copyWith(fontWeight: FontWeight.w600),
-            ),
+            controller.balance == null
+                ? Shimmer.fromColors(
+                    baseColor: Get.theme.colorScheme.primaryContainer,
+                    highlightColor:
+                        Get.theme.colorScheme.primary.withOpacity(.7),
+                    child: Container(
+                      height: 32,
+                      width: 120,
+                      color: Colors.grey,
+                    ),
+                  )
+                : Text(
+                    "CFA ${controller.balance!}",
+                    style: Get.textTheme.headlineSmall!
+                        .copyWith(fontWeight: FontWeight.w600),
+                  ),
             const Text("Central African Franc"),
             const SizedBox(height: 18),
             Row(

@@ -1,11 +1,36 @@
 import 'package:dimplespay_feature_implementation/models/transaction.dart';
+import 'package:dimplespay_feature_implementation/utils/api_service.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class DashboardController extends GetxController {
   List<Transaction> transactions = [];
+  double? balance = 0.0;
+
+  final ApiService _apiService = Get.find<ApiService>();
 
   DashboardController() {
+    _loadBalance();
     _fetchTransactions();
+  }
+
+  void _loadBalance() {
+    _apiService.getWalletBalance().then((value) {
+      balance = value;
+      update();
+    }).catchError((e) {
+      balance = 0.00;
+      update();
+
+      Get.showSnackbar(GetSnackBar(
+        message: e.toString(),
+        duration: const Duration(seconds: 3),
+        backgroundColor: Get.theme.colorScheme.error,
+        icon: const Icon(Icons.money_off_csred_outlined),
+        margin: const EdgeInsets.all(16),
+        borderRadius: 8,
+      ));
+    });
   }
 
   void _fetchTransactions() {
@@ -30,7 +55,7 @@ class DashboardController extends GetxController {
         id: 3,
         amount: 1500,
         type: 'topup',
-        description: "Top up card",
+        description: "Top up wallet",
         status: 'completed',
         timestamp: DateTime.now().subtract(const Duration(hours: 7)),
       ),

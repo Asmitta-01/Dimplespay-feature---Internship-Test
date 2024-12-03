@@ -57,10 +57,12 @@ class ApiService {
     }
 
     try {
-      final response = await http.get(
-        Uri.parse('$baseUrl/wallet/balance'),
-        headers: _headers,
-      );
+      final response = await http
+          .get(
+            Uri.parse('$baseUrl/api/wallet/balance'),
+            headers: _headers,
+          )
+          .timeout(const Duration(seconds: 8));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
@@ -68,8 +70,43 @@ class ApiService {
       } else {
         throw Exception('Failed to fetch balance: ${response.statusCode}');
       }
+    } on TimeoutException {
+      throw Exception("Request timeout, check your connection");
+    } on SocketException {
+      throw Exception("Please check your internet connection");
     } catch (e) {
-      throw Exception('Balance fetch error: $e');
+      throw Exception('An error occurs while fetching the balance');
+    }
+  }
+
+  Future<bool> topupWallet(double amount) async {
+    if (_authToken == null) {
+      throw Exception('User not authenticated');
+    }
+
+    try {
+      final response = await http
+          .post(
+            Uri.parse('$baseUrl/api/wallet/topup'),
+            headers: _headers,
+            body: jsonEncode({
+              'amount': amount,
+            }),
+          )
+          .timeout(const Duration(seconds: 6));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return data['success'];
+      } else {
+        throw Exception('Failed to topup your wallet: ${response.statusCode}');
+      }
+    } on TimeoutException {
+      throw Exception("Request timeout, check your connection");
+    } on SocketException {
+      throw Exception("Please check your internet connection");
+    } catch (e) {
+      throw Exception('An error occurs during the topup');
     }
   }
 
