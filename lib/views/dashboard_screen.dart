@@ -186,7 +186,7 @@ class DashboardScreen extends GetView<DashboardController> {
             Row(
               children: [
                 ElevatedButton.icon(
-                  onPressed: () {},
+                  onPressed: controller.topUp,
                   label: const Text("Add Money"),
                   icon: const Icon(Icons.add, size: 20),
                   iconAlignment: IconAlignment.start,

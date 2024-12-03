@@ -1,5 +1,6 @@
 import 'package:dimplespay_feature_implementation/models/transaction.dart';
 import 'package:dimplespay_feature_implementation/utils/api_service.dart';
+import 'package:dimplespay_feature_implementation/widgets/top_up_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,9 +20,6 @@ class DashboardController extends GetxController {
       balance = value;
       update();
     }).catchError((e) {
-      balance = 0.00;
-      update();
-
       Get.showSnackbar(GetSnackBar(
         message: e.toString(),
         duration: const Duration(seconds: 3),
@@ -30,6 +28,9 @@ class DashboardController extends GetxController {
         margin: const EdgeInsets.all(16),
         borderRadius: 8,
       ));
+
+      // balance = 0.00;
+      // update();
     });
   }
 
@@ -94,7 +95,18 @@ class DashboardController extends GetxController {
     ];
   }
 
-  void topUp() {}
+  void topUp() {
+    Get.bottomSheet(
+      const TopUpWidget(),
+      enableDrag: false,
+      isDismissible: true,
+      isScrollControlled: true,
+    ).then((result) {
+      if (result == true) {
+        _loadBalance();
+      }
+    });
+  }
 
   void transfer() {}
 

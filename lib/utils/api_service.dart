@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  final String baseUrl = "https://192.168.1.121:8000";
+  final String baseUrl = "https://192.168.150.166:8000";
 
   String? _authToken;
 
