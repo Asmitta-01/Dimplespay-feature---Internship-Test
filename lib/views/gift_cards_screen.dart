@@ -35,9 +35,13 @@ class GiftCardsScreen extends GetView<GiftCardsController> {
                   ),
                 ),
           floatingActionButton: FloatingActionButton(
-            onPressed: controller.showRedeemDialog,
+            onPressed:
+                controller.redeeming ? null : controller.showRedeemDialog,
             backgroundColor: Get.theme.colorScheme.primary,
-            child: const Icon(Icons.redeem),
+            child: controller.redeeming
+                ? LoadingAnimationWidget.beat(
+                    color: Get.theme.colorScheme.onPrimary, size: 20)
+                : const Icon(Icons.redeem),
           ),
         );
       },

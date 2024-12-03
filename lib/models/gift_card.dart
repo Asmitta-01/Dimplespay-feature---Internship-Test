@@ -1,5 +1,5 @@
 class GiftCard {
-  final String id;
+  final int id;
   final double amount;
   final String code;
   final bool isRedeemed;

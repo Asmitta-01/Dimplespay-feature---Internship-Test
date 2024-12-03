@@ -212,7 +212,7 @@ class ApiService {
 
     try {
       final response = await http
-          .post(
+          .get(
             Uri.parse('$baseUrl/api/gift-cards'),
             headers: _headers,
           )
@@ -233,7 +233,7 @@ class ApiService {
     }
   }
 
-  Future<bool> purchaseGiftCard(String cardId) async {
+  Future<bool> purchaseGiftCard(int cardId) async {
     if (_authToken == null) {
       throw Exception('User not authenticated');
     }
@@ -262,6 +262,38 @@ class ApiService {
       throw Exception("Please check your internet connection");
     } catch (e) {
       throw Exception('An error occurs during the purchase');
+    }
+  }
+
+  Future<bool> redeemGiftCard(String code) async {
+    if (_authToken == null) {
+      throw Exception('User not authenticated');
+    }
+
+    try {
+      final response = await http
+          .post(
+            Uri.parse('$baseUrl/api/gift-cards/redeem'),
+            headers: _headers,
+            body: jsonEncode({'code': code}),
+          )
+          .timeout(const Duration(seconds: 8));
+
+      final data = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        if (data['success'] == false) {
+          throw Exception(data['message']);
+        }
+        return true;
+      } else {
+        throw Exception(data['message']);
+      }
+    } on TimeoutException {
+      throw Exception("Request timeout, check your connection");
+    } on SocketException {
+      throw Exception("Please check your internet connection");
+    } catch (e) {
+      throw Exception(e.toString());
     }
   }
 
