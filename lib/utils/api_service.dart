@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  final String baseUrl = "https://192.168.150.166:8000";
+  final String baseUrl = "https://192.168.1.52:8000";
 
   String? _authToken;
 
@@ -107,6 +107,102 @@ class ApiService {
       throw Exception("Please check your internet connection");
     } catch (e) {
       throw Exception('An error occurs during the topup');
+    }
+  }
+
+  Future<bool> activateCard() async {
+    if (_authToken == null) {
+      throw Exception('User not authenticated');
+    }
+
+    try {
+      final response = await http
+          .post(
+            Uri.parse('$baseUrl/api/nfc/activate'),
+            headers: _headers,
+          )
+          .timeout(const Duration(seconds: 8));
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        final data = jsonDecode(response.body);
+        throw Exception(data['message']);
+      }
+    } on TimeoutException {
+      throw Exception("Request timeout, check your connection");
+    } on SocketException {
+      throw Exception("Please check your internet connection");
+    } catch (e) {
+      throw Exception('An error occurs during the topup');
+    }
+  }
+
+  Future<bool> topupCard(double amount) async {
+    if (_authToken == null) {
+      throw Exception('User not authenticated');
+    }
+
+    try {
+      final response = await http
+          .post(
+            Uri.parse('$baseUrl/api/nfc/topup'),
+            headers: _headers,
+            body: jsonEncode({
+              'amount': amount,
+            }),
+          )
+          .timeout(const Duration(seconds: 8));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        if (data['success'] == false) {
+          throw Exception(data['message']);
+        }
+        return true;
+      } else {
+        throw Exception('Failed to topup your wallet');
+      }
+    } on TimeoutException {
+      throw Exception("Request timeout, check your connection");
+    } on SocketException {
+      throw Exception("Please check your internet connection");
+    } catch (e) {
+      throw Exception('An error occurs during the topup');
+    }
+  }
+
+  Future<bool> deductCard(double amount) async {
+    if (_authToken == null) {
+      throw Exception('User not authenticated');
+    }
+
+    try {
+      final response = await http
+          .post(
+            Uri.parse('$baseUrl/api/nfc/deduct'),
+            headers: _headers,
+            body: jsonEncode({
+              'amount': amount,
+            }),
+          )
+          .timeout(const Duration(seconds: 8));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        if (data['success'] == false) {
+          throw Exception(data['message']);
+        }
+        return true;
+      } else {
+        throw Exception('Failed to deduct');
+      }
+    } on TimeoutException {
+      throw Exception("Request timeout, check your connection");
+    } on SocketException {
+      throw Exception("Please check your internet connection");
+    } catch (e) {
+      throw Exception('An error occurs during the deduction');
     }
   }
 

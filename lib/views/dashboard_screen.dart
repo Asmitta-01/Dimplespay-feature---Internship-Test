@@ -1,6 +1,7 @@
 import 'package:dimplespay_feature_implementation/controllers/dashboard_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:shimmer/shimmer.dart';
 
 class DashboardScreen extends GetView<DashboardController> {
@@ -32,7 +33,9 @@ class DashboardScreen extends GetView<DashboardController> {
             ),
             const SizedBox(height: 12),
             _buildWalletCard(),
-            const SizedBox(height: 24),
+            const SizedBox(height: 18),
+            controller.cardIsActive ? _buildNFCCard() : _getNFCInactiveCard(),
+            const SizedBox(height: 18),
             Row(
               textBaseline: TextBaseline.alphabetic,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -234,5 +237,124 @@ class DashboardScreen extends GetView<DashboardController> {
             ),
           ],
         ));
+  }
+
+  Widget _getNFCInactiveCard() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Get.theme.colorScheme.errorContainer.withOpacity(.4),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        children: [
+          CircleAvatar(
+            radius: 18,
+            backgroundColor: Get.theme.colorScheme.errorContainer,
+            child: Icon(
+              Icons.contactless_outlined,
+              color: Get.theme.colorScheme.onErrorContainer,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "NFC Payment Inactive",
+                  style: Get.textTheme.titleMedium!.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const Text("Enable your NFC card to pay contactless"),
+              ],
+            ),
+          ),
+          controller.activatingCard
+              ? Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: LoadingAnimationWidget.beat(
+                    color: Get.theme.colorScheme.errorContainer,
+                    size: 28,
+                  ),
+                )
+              : IconButton(
+                  onPressed: controller.activateCard,
+                  icon: Icon(
+                    Icons.arrow_forward_ios_rounded,
+                    size: 16,
+                    color: Get.theme.colorScheme.onSurface.withOpacity(.5),
+                  ),
+                )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNFCCard() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Get.theme.colorScheme.surface,
+        boxShadow: [
+          BoxShadow(
+            blurRadius: 3,
+            color: Get.theme.colorScheme.onSurface.withOpacity(.15),
+          )
+        ],
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        children: [
+          CircleAvatar(
+            radius: 18,
+            backgroundColor: Get.theme.colorScheme.primary.withOpacity(.1),
+            child: Icon(
+              Icons.contactless_outlined,
+              color: Get.theme.colorScheme.primary,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "NFC Card Balance",
+                  style: Get.textTheme.titleMedium!.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                controller.balance == null
+                    ? Shimmer.fromColors(
+                        baseColor: Get.theme.colorScheme.primaryContainer,
+                        highlightColor:
+                            Get.theme.colorScheme.primary.withOpacity(.7),
+                        child: Container(
+                          height: 20,
+                          width: 80,
+                          color: Colors.grey,
+                        ),
+                      )
+                    : Text(
+                        "CFA ${controller.balance!}",
+                        style: Get.textTheme.bodyLarge!.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+              ],
+            ),
+          ),
+          IconButton(
+            onPressed: controller.topUpCard,
+            icon: Icon(
+              Icons.add_circle_outline,
+              color: Get.theme.colorScheme.primary,
+            ),
+          )
+        ],
+      ),
+    );
   }
 }

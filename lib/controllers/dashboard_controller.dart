@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 class DashboardController extends GetxController {
   List<Transaction> transactions = [];
   double? balance = 0.0;
+  bool cardIsActive = false, activatingCard = false;
 
   final ApiService _apiService = Get.find<ApiService>();
 
@@ -20,18 +21,30 @@ class DashboardController extends GetxController {
       balance = value;
       update();
     }).catchError((e) {
-      Get.showSnackbar(GetSnackBar(
-        message: e.toString(),
-        duration: const Duration(seconds: 3),
-        backgroundColor: Get.theme.colorScheme.error,
-        icon: const Icon(Icons.money_off_csred_outlined),
-        margin: const EdgeInsets.all(16),
-        borderRadius: 8,
-      ));
+      _displaySnackbar(e.toString(), Icons.money_off_csred_outlined,
+          isError: true);
 
-      // balance = 0.00;
-      // update();
+      balance = 0.00;
+      update();
     });
+  }
+
+  SnackbarController _displaySnackbar(String message, IconData iconData,
+      {bool isError = false}) {
+    return Get.showSnackbar(GetSnackBar(
+      message: message,
+      duration: const Duration(seconds: 3),
+      backgroundColor:
+          isError ? Get.theme.colorScheme.error : Get.theme.colorScheme.primary,
+      icon: Icon(
+        iconData,
+        color: isError
+            ? Get.theme.colorScheme.onError
+            : Get.theme.colorScheme.onPrimary,
+      ),
+      margin: const EdgeInsets.all(16),
+      borderRadius: 8,
+    ));
   }
 
   void _fetchTransactions() {
@@ -109,6 +122,28 @@ class DashboardController extends GetxController {
   }
 
   void transfer() {}
+
+  void topUpCard() {}
+
+  void activateCard() async {
+    activatingCard = true;
+    update();
+
+    cardIsActive = await _apiService.activateCard().catchError((e) {
+      _displaySnackbar(
+        e.toString(),
+        Icons.pivot_table_chart_rounded,
+        isError: true,
+      );
+      return false;
+    });
+    activatingCard = false;
+    update();
+
+    if (cardIsActive) {
+      _displaySnackbar("Card activated", Icons.payment);
+    }
+  }
 
   void goToTransactionsScreen() {}
 }
