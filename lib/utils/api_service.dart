@@ -222,7 +222,7 @@ class ApiService {
         final data = jsonDecode(response.body);
         return (data as List).map((json) => GiftCard.fromJson(json)).toList();
       } else {
-        throw Exception('Failed to topup your wallet: ${response.statusCode}');
+        throw Exception('Failed to load gift cards: ${response.statusCode}');
       }
     } on TimeoutException {
       throw Exception("Request timeout, check your connection");
@@ -230,6 +230,38 @@ class ApiService {
       throw Exception("Please check your internet connection");
     } catch (e) {
       throw Exception('An error occurs when retrieving gift cards');
+    }
+  }
+
+  Future<bool> purchaseGiftCard(String cardId) async {
+    if (_authToken == null) {
+      throw Exception('User not authenticated');
+    }
+
+    try {
+      final response = await http
+          .post(
+            Uri.parse('$baseUrl/api/gift-cards/purchase'),
+            headers: _headers,
+            body: jsonEncode({'cardId': cardId}),
+          )
+          .timeout(const Duration(seconds: 8));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        if (data['success'] == false) {
+          throw Exception(data['message']);
+        }
+        return true;
+      } else {
+        throw Exception('Purchased failed');
+      }
+    } on TimeoutException {
+      throw Exception("Request timeout, check your connection");
+    } on SocketException {
+      throw Exception("Please check your internet connection");
+    } catch (e) {
+      throw Exception('An error occurs during the purchase');
     }
   }
 

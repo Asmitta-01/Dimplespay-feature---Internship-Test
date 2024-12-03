@@ -36,7 +36,34 @@ class GiftCardsController extends GetxController {
     update();
   }
 
-  Future<void> purchaseGiftCard(GiftCard card) async {}
+  Future<void> purchaseGiftCard(GiftCard card) async {
+    try {
+      final success = await _apiService.purchaseGiftCard(card.id);
+      if (success) {
+        Get.showSnackbar(GetSnackBar(
+          message: 'Gift card purchased successfully',
+          duration: const Duration(seconds: 3),
+          backgroundColor: Get.theme.colorScheme.error,
+          icon: const Icon(Icons.wallet_giftcard, color: Colors.green),
+          margin: const EdgeInsets.all(16),
+          borderRadius: 8,
+        ));
+        loadGiftCards();
+      }
+    } catch (e) {
+      Get.showSnackbar(GetSnackBar(
+        message: e.toString(),
+        duration: const Duration(seconds: 3),
+        backgroundColor: Get.theme.colorScheme.error,
+        icon: Icon(
+          Icons.payment,
+          color: Get.theme.colorScheme.onError,
+        ),
+        margin: const EdgeInsets.all(16),
+        borderRadius: 8,
+      ));
+    }
+  }
 
   Future<void> redeemGiftCard(String code) async {}
 
