@@ -1,12 +1,13 @@
 import 'package:dimplespay_feature_implementation/models/transaction.dart';
 import 'package:dimplespay_feature_implementation/utils/api_service.dart';
 import 'package:dimplespay_feature_implementation/widgets/top_up_widget.dart';
+import 'package:dimplespay_feature_implementation/widgets/transfer_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class DashboardController extends GetxController {
   List<Transaction> transactions = [];
-  double? balance = 0.0;
+  double? balance, cardBalance = 0.0;
   bool cardIsActive = false, activatingCard = false;
 
   final ApiService _apiService = Get.find<ApiService>();
@@ -121,9 +122,20 @@ class DashboardController extends GetxController {
     });
   }
 
-  void transfer() {}
+  void transfer() {
+    Get.bottomSheet(
+      const TransferWidget(),
+      enableDrag: false,
+      isDismissible: false,
+      isScrollControlled: true,
+    ).then((result) {
+      if (result == true) {
+        _loadBalance();
+      }
+    });
+  }
 
-  void topUpCard() {}
+  void topUpCard() => transfer();
 
   void activateCard() async {
     activatingCard = true;
