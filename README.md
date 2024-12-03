@@ -1,19 +1,22 @@
 # DimplesPay feature implementation
 
 A new Flutter project.
+_Version: 3.24.3_
 
-## Getting Started
+## About
 
-This project is a starting point for a Flutter application.
+**State Management**
+We've used [GetX](https://pub.dev/packages/get) for efficient state management.
 
-A few resources to get you started if this is your first Flutter project:
+**API Integration**
+The app communicates with the [backend API](https://github.com/Asmitta-01/DimplesPay-api/) to fetch and send data. Ensure you have the correct API endpoints and authentication mechanisms in place.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+**Note**: The api [baseUrl](https://github.com/Asmitta-01/Dimplespay-feature---Internship-Test/blob/bde7deecef0b35429c6fe162b1955d9ebc0e334e/lib/utils/api_service.dart#L10) value depends on your platform.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+E.g.
+
+- On real device it should be the ip address of your PC, assuming your device and Phone are on a same network.
+- On an emulator you should put `10.0.2.2`
 
 ## Tasks
 
