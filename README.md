@@ -18,6 +18,12 @@ E.g.
 - On real device it should be the ip address of your PC, assuming your device and Phone are on a same network.
 - On an emulator you should put `10.0.2.2`
 
+### Screenshots
+
+|![Local Image](./assets/images/screenshots/1.jpg)|![Local Image](./assets/images/screenshots/2.jpg)|
+|----------------------------------|-----------------|
+|![Local Image](./assets/images/screenshots/3.jpg)|![Local Image](./assets/images/screenshots/4.jpg)|
+
 ## Tasks
 
 - Develop a small mobile application to demonstrate proficiency in:
