@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  final String baseUrl = "https://192.168.1.52:8000";
+  final String baseUrl = "https://192.168.150.166:8000";
 
   String? _authToken;
 
@@ -172,7 +172,7 @@ class ApiService {
     }
   }
 
-  Future<bool> deductCard(double amount) async {
+  Future<bool> deductCard(double amount, int pinCode) async {
     if (_authToken == null) {
       throw Exception('User not authenticated');
     }
@@ -182,9 +182,7 @@ class ApiService {
           .post(
             Uri.parse('$baseUrl/api/nfc/deduct'),
             headers: _headers,
-            body: jsonEncode({
-              'amount': amount,
-            }),
+            body: jsonEncode({'amount': amount, 'pinCode': pinCode}),
           )
           .timeout(const Duration(seconds: 8));
 

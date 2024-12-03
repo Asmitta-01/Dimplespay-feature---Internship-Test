@@ -1,5 +1,6 @@
 import 'package:dimplespay_feature_implementation/models/transaction.dart';
 import 'package:dimplespay_feature_implementation/utils/api_service.dart';
+import 'package:dimplespay_feature_implementation/widgets/deduct_widget.dart';
 import 'package:dimplespay_feature_implementation/widgets/top_up_widget.dart';
 import 'package:dimplespay_feature_implementation/widgets/transfer_widget.dart';
 import 'package:flutter/material.dart';
@@ -135,7 +136,54 @@ class DashboardController extends GetxController {
     });
   }
 
-  void topUpCard() => transfer();
+  void showCardActions() {
+    Get.bottomSheet(
+      Container(
+        decoration: BoxDecoration(
+          color: Get.theme.colorScheme.surface,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.account_balance),
+              title: const Text("Top up card"),
+              onTap: () {
+                Get.back();
+                transfer();
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.point_of_sale),
+              title: const Text("Deduct card"),
+              onTap: () {
+                Get.back();
+                deductCard();
+              },
+            ),
+          ],
+        ),
+      ),
+      enableDrag: false,
+      isDismissible: true,
+      isScrollControlled: true,
+    );
+  }
+
+  void deductCard() {
+    Get.bottomSheet(
+      const DeductWidget(),
+      enableDrag: false,
+      isDismissible: false,
+      isScrollControlled: true,
+    ).then((result) {
+      if (result == true) {
+        _loadBalance();
+      }
+    });
+  }
 
   void activateCard() async {
     activatingCard = true;

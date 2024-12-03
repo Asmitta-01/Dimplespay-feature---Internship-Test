@@ -347,7 +347,7 @@ class DashboardScreen extends GetView<DashboardController> {
             ),
           ),
           IconButton(
-            onPressed: controller.topUpCard,
+            onPressed: controller.showCardActions,
             icon: Icon(
               Icons.add_circle_outline,
               color: Get.theme.colorScheme.primary,
