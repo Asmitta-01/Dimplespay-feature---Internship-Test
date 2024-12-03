@@ -1,4 +1,5 @@
 import 'package:dimplespay_feature_implementation/models/transaction.dart';
+import 'package:dimplespay_feature_implementation/routes.dart';
 import 'package:dimplespay_feature_implementation/utils/api_service.dart';
 import 'package:dimplespay_feature_implementation/widgets/deduct_widget.dart';
 import 'package:dimplespay_feature_implementation/widgets/top_up_widget.dart';
@@ -205,5 +206,7 @@ class DashboardController extends GetxController {
     }
   }
 
-  void goToTransactionsScreen() {}
+  void goToGiftCardsScreen() {
+    Get.toNamed(Routes.giftCards);
+  }
 }

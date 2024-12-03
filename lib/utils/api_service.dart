@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:dimplespay_feature_implementation/models/gift_card.dart';
 import 'package:dimplespay_feature_implementation/models/transaction.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
@@ -201,6 +202,34 @@ class ApiService {
       throw Exception("Please check your internet connection");
     } catch (e) {
       throw Exception('An error occurs during the deduction');
+    }
+  }
+
+  Future<List<GiftCard>> getAvailableGiftCards() async {
+    if (_authToken == null) {
+      throw Exception('User not authenticated');
+    }
+
+    try {
+      final response = await http
+          .post(
+            Uri.parse('$baseUrl/api/gift-cards'),
+            headers: _headers,
+          )
+          .timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return (data as List).map((json) => GiftCard.fromJson(json)).toList();
+      } else {
+        throw Exception('Failed to topup your wallet: ${response.statusCode}');
+      }
+    } on TimeoutException {
+      throw Exception("Request timeout, check your connection");
+    } on SocketException {
+      throw Exception("Please check your internet connection");
+    } catch (e) {
+      throw Exception('An error occurs when retrieving gift cards');
     }
   }
 

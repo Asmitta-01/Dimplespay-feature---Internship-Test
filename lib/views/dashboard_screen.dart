@@ -15,16 +15,32 @@ class DashboardScreen extends GetView<DashboardController> {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 48),
           shrinkWrap: true,
           children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: CircleAvatar(
-                radius: 18,
-                backgroundColor: Get.theme.colorScheme.primary,
-                child: Icon(
-                  Icons.person_outline_rounded,
-                  color: Get.theme.colorScheme.onPrimary,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CircleAvatar(
+                  radius: 18,
+                  backgroundColor: Get.theme.colorScheme.primary,
+                  child: Icon(
+                    Icons.person_outline_rounded,
+                    color: Get.theme.colorScheme.onPrimary,
+                  ),
                 ),
-              ),
+                ElevatedButton.icon(
+                  onPressed: controller.goToGiftCardsScreen,
+                  icon: const Icon(Icons.card_giftcard, size: 16),
+                  label: const Text("Gift Cards"),
+                  iconAlignment: IconAlignment.start,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        Get.theme.colorScheme.primary.withOpacity(.1),
+                    foregroundColor: Get.theme.colorScheme.primary,
+                    textStyle: Get.textTheme.bodyMedium!.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                )
+              ],
             ),
             const SizedBox(height: 24),
             Text(
@@ -47,7 +63,7 @@ class DashboardScreen extends GetView<DashboardController> {
                       .copyWith(fontWeight: FontWeight.w600),
                 ),
                 InkWell(
-                  onTap: controller.goToTransactionsScreen,
+                  onTap: null,
                   child: Text(
                     "See all",
                     style: TextStyle(
