@@ -30,6 +30,7 @@ class GiftCardsScreen extends GetView<GiftCardsController> {
                       return GiftCardWidget(
                         giftCard: card,
                         onPurchase: () => controller.purchaseGiftCard(card),
+                        purchasing: controller.purchasing,
                       );
                     },
                   ),

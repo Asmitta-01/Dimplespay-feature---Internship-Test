@@ -1,3 +1,4 @@
+import 'package:dimplespay_feature_implementation/models/nfc_card.dart';
 import 'package:dimplespay_feature_implementation/models/transaction.dart';
 import 'package:dimplespay_feature_implementation/routes.dart';
 import 'package:dimplespay_feature_implementation/utils/api_service.dart';
@@ -9,17 +10,20 @@ import 'package:get/get.dart';
 
 class DashboardController extends GetxController {
   List<Transaction> transactions = [];
-  double? balance, cardBalance = 0.0;
-  bool cardIsActive = false, activatingCard = false;
+  double? balance;
+  int? cardId;
+  bool activatingCard = false;
+
+  NfcCard? card;
 
   final ApiService _apiService = Get.find<ApiService>();
 
   DashboardController() {
-    _loadBalance();
+    loadBalance();
     _fetchTransactions();
   }
 
-  void _loadBalance() {
+  void loadBalance() {
     _apiService.getWalletBalance().then((value) {
       balance = value;
       update();
@@ -119,7 +123,8 @@ class DashboardController extends GetxController {
       isScrollControlled: true,
     ).then((result) {
       if (result == true) {
-        _loadBalance();
+        loadBalance();
+        _loadCard();
       }
     });
   }
@@ -132,7 +137,8 @@ class DashboardController extends GetxController {
       isScrollControlled: true,
     ).then((result) {
       if (result == true) {
-        _loadBalance();
+        loadBalance();
+        _loadCard();
       }
     });
   }
@@ -181,7 +187,8 @@ class DashboardController extends GetxController {
       isScrollControlled: true,
     ).then((result) {
       if (result == true) {
-        _loadBalance();
+        loadBalance();
+        _loadCard();
       }
     });
   }
@@ -190,20 +197,34 @@ class DashboardController extends GetxController {
     activatingCard = true;
     update();
 
-    cardIsActive = await _apiService.activateCard().catchError((e) {
+    cardId = await _apiService.activateCard().catchError((e) {
       _displaySnackbar(
         e.toString(),
         Icons.pivot_table_chart_rounded,
         isError: true,
       );
-      return false;
+      return null;
     });
+    if (cardId != null) {
+      await _loadCard();
+      if (card != null) {
+        _displaySnackbar("Card activated", Icons.payment);
+      }
+    }
+
     activatingCard = false;
     update();
+  }
 
-    if (cardIsActive) {
-      _displaySnackbar("Card activated", Icons.payment);
-    }
+  Future<void> _loadCard() async {
+    card = await _apiService.getCard(cardId!).catchError((e) {
+      _displaySnackbar(
+        e.toString(),
+        Icons.pivot_table_chart_rounded,
+        isError: true,
+      );
+      return null;
+    });
   }
 
   void goToGiftCardsScreen() {

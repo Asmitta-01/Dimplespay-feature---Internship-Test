@@ -50,7 +50,7 @@ class DashboardScreen extends GetView<DashboardController> {
             const SizedBox(height: 12),
             _buildWalletCard(),
             const SizedBox(height: 18),
-            controller.cardIsActive ? _buildNFCCard() : _getNFCInactiveCard(),
+            controller.card != null ? _buildNFCCard() : _getNFCInactiveCard(),
             const SizedBox(height: 18),
             Row(
               textBaseline: TextBaseline.alphabetic,
@@ -236,7 +236,7 @@ class DashboardScreen extends GetView<DashboardController> {
                 const SizedBox(width: 12),
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: controller.loadBalance,
                     iconAlignment: IconAlignment.start,
                     style: ElevatedButton.styleFrom(
                       backgroundColor:
@@ -246,7 +246,7 @@ class DashboardScreen extends GetView<DashboardController> {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    child: const Icon(Icons.more_horiz, size: 20),
+                    child: const Icon(Icons.refresh, size: 20),
                   ),
                 ),
               ],
@@ -354,7 +354,7 @@ class DashboardScreen extends GetView<DashboardController> {
                         ),
                       )
                     : Text(
-                        "CFA ${controller.balance!}",
+                        "CFA ${controller.card!.balance}",
                         style: Get.textTheme.bodyLarge!.copyWith(
                           fontWeight: FontWeight.w500,
                         ),

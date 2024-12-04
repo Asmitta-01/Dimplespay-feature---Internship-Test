@@ -2,12 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:dimplespay_feature_implementation/models/gift_card.dart';
+import 'package:dimplespay_feature_implementation/models/nfc_card.dart';
 import 'package:dimplespay_feature_implementation/models/transaction.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  final String baseUrl = "https://192.168.150.166:8000";
+  final String baseUrl = "https://192.168.1.52:8000";
 
   String? _authToken;
 
@@ -111,7 +112,7 @@ class ApiService {
     }
   }
 
-  Future<bool> activateCard() async {
+  Future<int?> activateCard() async {
     if (_authToken == null) {
       throw Exception('User not authenticated');
     }
@@ -124,10 +125,10 @@ class ApiService {
           )
           .timeout(const Duration(seconds: 8));
 
+      final data = jsonDecode(response.body);
       if (response.statusCode == 200) {
-        return true;
+        return data['card_id'];
       } else {
-        final data = jsonDecode(response.body);
         throw Exception(data['message']);
       }
     } on TimeoutException {
@@ -135,7 +136,7 @@ class ApiService {
     } on SocketException {
       throw Exception("Please check your internet connection");
     } catch (e) {
-      throw Exception('An error occurs during the topup');
+      throw Exception(e.toString());
     }
   }
 
@@ -143,6 +144,8 @@ class ApiService {
     if (_authToken == null) {
       throw Exception('User not authenticated');
     }
+
+    String? responseMessage;
 
     try {
       final response = await http
@@ -155,14 +158,10 @@ class ApiService {
           )
           .timeout(const Duration(seconds: 8));
 
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        if (data['success'] == false) {
-          throw Exception(data['message']);
-        }
+      final data = jsonDecode(response.body);
+      responseMessage = data['message'];
+      if (response.statusCode == 200 && data['success'] == true) {
         return true;
-      } else {
-        throw Exception('Failed to topup your wallet');
       }
     } on TimeoutException {
       throw Exception("Request timeout, check your connection");
@@ -171,6 +170,9 @@ class ApiService {
     } catch (e) {
       throw Exception('An error occurs during the topup');
     }
+
+    responseMessage ??= 'Failed to topup your wallet';
+    throw Exception(responseMessage);
   }
 
   Future<bool> deductCard(double amount, int pinCode) async {
@@ -202,6 +204,30 @@ class ApiService {
       throw Exception("Please check your internet connection");
     } catch (e) {
       throw Exception('An error occurs during the deduction');
+    }
+  }
+
+  Future<NfcCard?> getCard(int id) async {
+    if (_authToken == null) {
+      throw Exception('User not authenticated');
+    }
+
+    try {
+      final response = await http
+          .get(
+            Uri.parse('$baseUrl/api/cards/$id'),
+            headers: _headers,
+          )
+          .timeout(const Duration(seconds: 10));
+
+      final data = jsonDecode(response.body);
+      return NfcCard.fromJson(data);
+    } on TimeoutException {
+      throw Exception("Request timeout, check your connection");
+    } on SocketException {
+      throw Exception("Please check your internet connection");
+    } catch (e) {
+      throw Exception(e.toString());
     }
   }
 
@@ -238,6 +264,8 @@ class ApiService {
       throw Exception('User not authenticated');
     }
 
+    String? responseMessage;
+
     try {
       final response = await http
           .post(
@@ -247,14 +275,13 @@ class ApiService {
           )
           .timeout(const Duration(seconds: 8));
 
+      final data = jsonDecode(response.body);
+      responseMessage = data['message'];
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
         if (data['success'] == false) {
-          throw Exception(data['message']);
+        } else {
+          return true;
         }
-        return true;
-      } else {
-        throw Exception('Purchased failed');
       }
     } on TimeoutException {
       throw Exception("Request timeout, check your connection");
@@ -263,6 +290,9 @@ class ApiService {
     } catch (e) {
       throw Exception('An error occurs during the purchase');
     }
+
+    responseMessage ??= 'Purchased failed';
+    throw Exception(responseMessage);
   }
 
   Future<bool> redeemGiftCard(String code) async {

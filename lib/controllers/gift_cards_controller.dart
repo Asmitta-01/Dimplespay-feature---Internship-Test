@@ -9,7 +9,7 @@ class GiftCardsController extends GetxController {
   final ApiService _apiService = Get.find<ApiService>();
 
   List<GiftCard> giftCards = <GiftCard>[];
-  bool isLoading = true, redeeming = false;
+  bool isLoading = true, redeeming = false, purchasing = false;
 
   GiftCardsController() {
     loadGiftCards();
@@ -38,14 +38,18 @@ class GiftCardsController extends GetxController {
   }
 
   Future<void> purchaseGiftCard(GiftCard card) async {
+    purchasing = true;
+    update();
+
     try {
       final success = await _apiService.purchaseGiftCard(card.id);
       if (success) {
         Get.showSnackbar(GetSnackBar(
           message: 'Gift card purchased successfully',
           duration: const Duration(seconds: 3),
-          backgroundColor: Get.theme.colorScheme.error,
-          icon: const Icon(Icons.wallet_giftcard, color: Colors.green),
+          backgroundColor: Get.theme.colorScheme.primary,
+          icon: Icon(Icons.wallet_giftcard,
+              color: Get.theme.colorScheme.onPrimary),
           margin: const EdgeInsets.all(16),
           borderRadius: 8,
         ));
@@ -64,6 +68,8 @@ class GiftCardsController extends GetxController {
         borderRadius: 8,
       ));
     }
+    purchasing = false;
+    update();
   }
 
   Future<void> redeemGiftCard(String code) async {
@@ -76,8 +82,9 @@ class GiftCardsController extends GetxController {
         Get.showSnackbar(GetSnackBar(
           message: 'Gift card redeemed successfully',
           duration: const Duration(seconds: 3),
-          backgroundColor: Get.theme.colorScheme.error,
-          icon: const Icon(Icons.wallet_giftcard, color: Colors.green),
+          backgroundColor: Get.theme.colorScheme.primary,
+          icon: Icon(Icons.wallet_giftcard,
+              color: Get.theme.colorScheme.onPrimary),
           margin: const EdgeInsets.all(16),
           borderRadius: 8,
         ));
